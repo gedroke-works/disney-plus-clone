@@ -27,7 +27,7 @@ function Header() {
             photo: user.photoURL,
           })
         );
-        navigate("/", { replace: true });
+        navigate("/home", { replace: true });
       }
     });
   }, []);
@@ -44,7 +44,7 @@ function Header() {
             photo: user.photoURL,
           })
         );
-        navigate("/", { replace: true });
+        navigate("/home", { replace: true });
       })
       .catch((err) => {
         console.log(err.message, err.code);
@@ -55,7 +55,7 @@ function Header() {
     signOut(auth)
       .then(() => {
         dispatch(setSignOut());
-        navigate("/login", { replace: true });
+        navigate("/", { replace: true });
       })
       .catch((err) => {
         console.log(err.code, err.message);
@@ -64,7 +64,7 @@ function Header() {
 
   return (
     <NavBar>
-      <Link to={`/`}>
+      <Link to={`/home`}>
         <Logo src="/images/logo.svg" alt="logo image" />
       </Link>
       {!userName ? (
@@ -79,23 +79,23 @@ function Header() {
               <span>HOME</span>
             </a>
             <a>
-              <img src="/images/search-icon.svg" alt="nav-items icons" />
+              <img src="/images/search-icon.svg" alt="" />
               <span>SEARCH</span>
             </a>
             <a>
-              <img src="/images/watchlist-icon.svg" alt="nav-items icons" />
+              <img src="/images/watchlist-icon.svg" alt="" />
               <span>WATCHLIST</span>
             </a>
             <a>
-              <img src="/images/original-icon.svg" alt="nav-items icons" />
+              <img src="/images/original-icon.svg" alt="" />
               <span>ORIGINALS</span>
             </a>
             <a>
-              <img src="/images/movie-icon.svg" alt="nav-items icons" />
+              <img src="/images/movie-icon.svg" alt="" />
               <span>MOVIES</span>
             </a>
             <a>
-              <img src="/images/series-icon.svg" alt="nav-items icons" />
+              <img src="/images/series-icon.svg" alt="" />
               <span>SERIES</span>
             </a>
           </NavMenu>
