@@ -106,7 +106,7 @@ const ImageTitle = styled.div`
 const Controls = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 24px;
 `;
 const PlayButton = styled.div`
   border-radius: 4px;

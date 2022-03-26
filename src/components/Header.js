@@ -1,16 +1,66 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { auth, provider } from '../firebase'
+import { Link, useNavigate } from "react-router-dom";
+import { auth, provider } from "../firebase";
+import { signInWithPopup, signOut } from "firebase/auth";
 import {
   selectUserName,
   selectUserPhoto,
+  setUserLogin,
+  setSignOut,
 } from "../features/user/userSlice";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 function Header() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userName = useSelector(selectUserName);
   const userPhoto = useSelector(selectUserPhoto);
+
+  useEffect(() => {
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        dispatch(
+          setUserLogin({
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL,
+          })
+        );
+        navigate("/", { replace: true });
+      }
+    });
+  }, []);
+
+  const signInClick = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log(result);
+        let user = result.user;
+        dispatch(
+          setUserLogin({
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL,
+          })
+        );
+        navigate("/", { replace: true });
+      })
+      .catch((err) => {
+        console.log(err.message, err.code);
+      });
+  };
+
+  const signOutClick = () => {
+    signOut(auth)
+      .then(() => {
+        dispatch(setSignOut());
+        navigate("/login", { replace: true });
+      })
+      .catch((err) => {
+        console.log(err.code, err.message);
+      });
+  };
 
   return (
     <NavBar>
@@ -18,9 +68,9 @@ function Header() {
         <Logo src="/images/logo.svg" alt="logo image" />
       </Link>
       {!userName ? (
-          <LoginContainer>
-            <Login>Login</Login>
-          </LoginContainer>
+        <LoginContainer>
+          <Login onClick={signInClick}>Login</Login>
+        </LoginContainer>
       ) : (
         <>
           <NavMenu>
@@ -49,11 +99,9 @@ function Header() {
               <span>SERIES</span>
             </a>
           </NavMenu>
-          <UserAccount src="/images/user-img.jpg" alt="user image" />
-
+          <UserAccount onClick={signOutClick} src={userPhoto} alt="" />
         </>
       )}
-
     </NavBar>
   );
 }
@@ -143,13 +191,13 @@ const UserAccount = styled.img`
  
 `;
 
-const LoginContainer = styled.div `
+const LoginContainer = styled.div`
   flex: 1;
   display: flex;
   justify-content: flex-end;
-`
+`;
 
-const Login = styled.div `
+const Login = styled.div`
   cursor: pointer;
   border: 1px solid #f9f9f9;
   border-radius: 10px;
@@ -160,8 +208,8 @@ const Login = styled.div `
   transition: all 0.2s ease 0s;
 
   &:hover {
-      background-color: #f9f9f9;
-      color: #000;
-      border-color: transparent;
+    background-color: #f9f9f9;
+    color: #000;
+    border-color: transparent;
   }
-`
+`;

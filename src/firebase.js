@@ -25,20 +25,3 @@ export {auth, provider, storage};
 export default db;
 
 
-
-
-// collection reference
-// const movieRef = collection(db, "movies");
-
-// get collection data
-// const movieDoc = getDocs(movieRef)
-// .then((snapshot) => {
-//     let movies = []
-//     snapshot.docs.forEach((doc) => {
-//         movies.push({...doc.data(), id: doc.id})
-//     })
-//     console.log(movies)
-// })
-// .catch(err => {
-//     console.log(err.message)
-// })
